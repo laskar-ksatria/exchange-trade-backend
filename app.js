@@ -23,13 +23,12 @@ app.use((req,res,next) => {
     next();
 })
 
-
 //router;
 app.use(require('./routes'));
+app.use(require('./middlewares/errHandler'));
 
 Io.on('connection', socket => {
     console.log('Io connect');
-
     Io.on('disconnect', () => console.log('Io disconnect'))
 })
 

@@ -21,7 +21,6 @@ const verifyToken = (token) => {
 };
 
 const generateText = (type) => {
-    
     switch(type) {
         case 'usd':
             return 'balance'
@@ -34,6 +33,8 @@ const generateText = (type) => {
         default :
             return false
     }
-}
+};
+
+
 
 module.exports = { getHash, checkPass, verifyToken, generateToken, generateText };

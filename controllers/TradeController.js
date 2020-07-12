@@ -7,7 +7,7 @@ class TradeController {
 
     static readAllLimit(req,res,next) {
         let pair = req.query.pair;
-        LimitTrade.find({pair}).then(pair => res.status(200).json(pair))
+        LimitTrade.find({pair}).then(trades => res.status(200).json(trades)).catch(err => console.log(err))
     };
 
     static readAllMarket(req,res,next) {
@@ -41,23 +41,32 @@ class TradeController {
         let amount = Number(req.body.amount);
         let price = Number(req.body.price);
         let leftAmount;
+        let total;
+        if (second_currency === 'usd') {
+            total = amount * price;
+        }else {
+            total = amount;
+        }
         
         let objectText = generateText(second_currency);
-        console.log(objectText)
         Account.findOne({user})
             .then(userAccount => {
-                console.log(userAccount)
                 if (userAccount) {
                     if (objectText) {
-                        if (userAccount[`${objectText}`] < amount) {
+                        if (userAccount[`${objectText}`] < total) {
                             next({message: `Your balance is not enough`})
                         }else {
                             leftAmount = userAccount[`${objectText}`] - amount;
                             return LimitTrade.create({user, pair, first_currency, second_currency, amount, price, amount_start: amount, order_type})
                                 .then(limitTrade => {
+                                    req.myTrade = limitTrade;
                                     Account.updateOne({user}, {[`${objectText}`]: leftAmount}, {omitUndefined: true})
                                         .then(() => {
-                                            res.status(200).json({message: 'Your order has been created'})
+                                            LimitTrade.find({order_type: 'buy'}).sort({price: 'asc'})
+                                                .then(limitTrades => {
+                                                    Io.emit(`${pair}-limit`, {limitTrades, order_type})
+                                                    next();
+                                                })
                                         }).catch(err => console.log(err))
                                 }).catch(err => console.log(err))
                         }
@@ -68,15 +77,47 @@ class TradeController {
                     next({message: "You must created account first"})
                 }
             }).catch(err => console.log(err))
-
     }
 
     static checkBuyOrder(req,res,next) {
-
+        // res.status(200).json({message: "Your order has been created"})
+        
     };
 
     static createSellLimitOrder(req,res,next) {
+        let user = req.decoded.id;
+        let Io = req.Io;
+        let pair = req.query.pair;
+        let { first_currency, second_currency, order_type } = req.body;
+        let amount = Number(req.body.amount);
+        let price = Number(req.body.price);
+        let amountLeft;
+        let objectText = generateText(first_currency);
 
+        Account.findOne({user})
+            .then(userAccount => {
+                if (userAccount) {
+                    if (userAccount[`${objectText}`] < amount) {
+                        next({message: 'Your balance not enough'})
+                    }else {
+                        amountLeft = userAccount[`${objectText}`] - amount;
+                        LimitTrade.create({user, order_type,pair, price,first_currency, second_currency, amount, amount_start: amount})
+                            .then(limitTrade => {
+                                req.myTrade = limitTrade
+                                return Account.updateOne({user}, {[`${objectText}`]: amountLeft}, {omitUndefined: true})
+                                    .then(() => {
+                                       return LimitTrade.find({order_type}).sort({price: 'asc'})
+                                        .then(limitTrades => {
+                                            Io.emit(`${pair}-limit`, {limitTrades, order_type});
+                                            res.status(200).json({message: "Your order has been created"})
+                                        })
+                                    })
+                            })
+                    }
+                }else {
+                    next({message: "You dont have account"})
+                }
+            }).catch(err => console.log(err))
     };
 
     static checkSellOrder(req,res,next) {

@@ -36,6 +36,10 @@ Router.get('/account', (req,res,next) => {
 Router.get('/accounts', (req,res,next) => {
     Account.find({}).then(accounts => {res.status(200).json(accounts)})
     // Account.deleteMany({}).then(() => res.send("oke"))
+});
 
+const LimitTrade = require('../models/LimitTrade');
+Router.get('/deletelimit', (req,res,next) => {
+    LimitTrade.deleteMany({}).then(() => res.send("Oke"))
 })
 module.exports = Router;
