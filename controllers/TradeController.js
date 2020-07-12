@@ -81,6 +81,10 @@ class TradeController {
 
     static checkBuyOrder(req,res,next) {
         // res.status(200).json({message: "Your order has been created"})
+        let Io = req.Io;
+        let myTrade = req.myTrade;
+        let { pair, order_type, first_currency, second_currency } = req.body;
+        
         
     };
 
