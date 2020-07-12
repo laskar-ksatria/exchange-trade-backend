@@ -1,22 +1,28 @@
 const mongoose = require('mongoose');
 
-const accountSchema = new mongoose({
+const accountSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     balance: {
-        type: Number
+        type: Number,
+        default: 10000000
     },
     BTC_coin: {
         type: Number,
+        default: 10000
     },
     ETH_coin: {
         type: Number,
+        default: 10000
     },
-    BNB_coin: {
-        type: Number
+    LTC_coin: {
+        type: Number,
+        default: 10000
     }
 })
 
-const account = mongoose.model('Account', account);
+const account = mongoose.model('Account', accountSchema);
+
+module.exports = account

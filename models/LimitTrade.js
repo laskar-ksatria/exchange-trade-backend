@@ -1,14 +1,11 @@
 const mongoose = require('mongoose');
 
-const LimitTradeSchema = new mongoose({
+const LimitTradeSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     pair: {
-        type: String,
-    },
-    currency: {
         type: String,
     },
     amount: {
@@ -18,15 +15,21 @@ const LimitTradeSchema = new mongoose({
         type: Number
     },
     filled: {
-        type: Number
+        type: Number,
+        default: 0
     },
     amount_start: {
         type: Number
     },
-    first_type: {
+    first_currency: {
         type: String,
+        required: [true, 'First currency cannot be empty']
     },
-    last_type: {
+    second_currency: {
+        type: String,
+        required: [true, 'Second currency cannot be empty']
+    },
+    order_type: {
         type: String
     }
 })

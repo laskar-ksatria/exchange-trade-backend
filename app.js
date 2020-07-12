@@ -11,6 +11,9 @@ const sokcetIo = require('socket.io');
 const Io = sokcetIo(server);
 const PORT = process.env.PORT;
 
+//mongo connect;
+require('./db.config')();
+
 //app.use
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -20,8 +23,14 @@ app.use((req,res,next) => {
     next();
 })
 
-//mongo connect;
-require('./db.config')();
 
+//router;
+app.use(require('./routes'));
+
+Io.on('connection', socket => {
+    console.log('Io connect');
+
+    Io.on('disconnect', () => console.log('Io disconnect'))
+})
 
 server.listen(PORT, () => console.log(`Server started on ${PORT}`))

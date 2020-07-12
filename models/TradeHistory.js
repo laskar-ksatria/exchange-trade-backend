@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const TradeHistorySchema = new mongoose({
+const TradeHistorySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

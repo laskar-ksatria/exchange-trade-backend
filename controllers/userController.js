@@ -1,5 +1,6 @@
 const User = require('../models/user');
-const { checkPass,  generateToken} = require('../helpers')
+const { checkPass,  generateToken} = require('../helpers');
+const Account = require('../models/account');
 
 class UserController {
     
@@ -36,6 +37,15 @@ class UserController {
                 }else { 
                     next({message: 'Invalid email / password'})
                 }
+            })
+            .catch(next)
+    };
+
+    static getAccount(req,res,next) {
+        let user = req.decoded.id;
+        Account.create({user, balance: 3000, BTC_coin: 5000, ETH_coin: 5000, LTC_coin: 5000})
+            .then(account => {
+                res.status(202).json({account, message: 'Your account has been created'})
             })
             .catch(next)
     };

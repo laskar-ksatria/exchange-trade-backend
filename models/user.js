@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const { getHash } = require('../helpers/index')
 
-const userSchehame = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Email cannot be empty'],
@@ -54,6 +54,6 @@ userSchema.pre('save', function (next) {
 
 
 
-const user = mongoose.model('User', userSchehame);
+const user = mongoose.model('User', userSchema);
 
 module.exports = user;
