@@ -16,11 +16,24 @@ Router.get('/trade/myLimitTrade', userAuth,TradeController.readAllmyLimit);
 Router.post('/trade/limit/buy', userAuth,TradeController.createBuyLimitOrder, TradeController.checkBuyOrder);
 Router.post('/trade/limit/sell', userAuth, TradeController.createSellLimitOrder, TradeController.checkSellOrder);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 //injection
 const Account = require('../models/account');
 
 Router.get('/account', (req,res,next) => {
-    let userId = ['5f092627e50f97310cdc4397', '5f09fced30da311758bf3659', '5f0adc185e87363cfc52e94a', '5f092684e50f97310cdc4398', '5f0adc185e87363cfc52e94a']
+    let userId = ['5f0bcd2871e16b3dc8d2037f', '5f0bcd4471e16b3dc8d20380', '5f0bcd9571e16b3dc8d20381', '5f0bcdb371e16b3dc8d20382', '5f0bcddd71e16b3dc8d20384']
     let createdAccounts = [];
     userId.forEach(item => {
         createdAccounts.push(Account.create({user: item}));
@@ -31,6 +44,12 @@ Router.get('/account', (req,res,next) => {
         .then(accounts => {
             res.status(200).json(accounts)
         })
+});
+
+const User = require('../models/user');
+
+Router.get('/delete-user', (req,res,next) => {
+    User.deleteMany({}).then(() => res.send("poke"))
 })
 
 Router.get('/accounts', (req,res,next) => {
@@ -41,5 +60,9 @@ Router.get('/accounts', (req,res,next) => {
 const LimitTrade = require('../models/LimitTrade');
 Router.get('/deletelimit', (req,res,next) => {
     LimitTrade.deleteMany({}).then(() => res.send("Oke"))
+})
+
+Router.get('/deleteAccount', (req,res,next) => {
+    Account.deleteMany({}).then(() => res.send("oke delete"))
 })
 module.exports = Router;

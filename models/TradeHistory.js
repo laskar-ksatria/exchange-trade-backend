@@ -8,8 +8,8 @@ const TradeHistorySchema = new mongoose.Schema({
     pair: {
         type: String,
     },
-    currency: {
-        type: String,
+    order_type: {
+        type: String
     },
     amount: {
         type: Number
@@ -17,16 +17,13 @@ const TradeHistorySchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    filled: {
-        type: Number
-    },
     amount_start: {
         type: Number
     },
-    first_type: {
+    first_currency: {
         type: String,
     },
-    last_type: {
+    second_currency: {
         type: String
     }
 })
