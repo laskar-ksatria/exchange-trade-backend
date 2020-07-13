@@ -116,14 +116,8 @@ class TradeController {
 
                 
                 if (limitStart > limitAmount) {
-                    console.log("Kondisi atas")
-                    console.log(limitStart)
-                    console.log(limitAmount)
                     let avg = limitStart - limitAmount;
                     leftAmount = lastLimitTrade.amount - limitAmount;
-                    console.log(avg)
-                    console.log(lastLimitTrade.amount)
-                    console.log(leftAmount);
                     let average = 1 - (avg / lastLimitTrade.amount_start);
                     //Update my account
                     updateLimit.push(LimitTrade.deleteOne({_id: myTrade.id}));
@@ -133,7 +127,6 @@ class TradeController {
                     tradeHistory.push(TradeHistory.create({user: lastLimitTrade.user, price: lastLimitTrade.price, amount: Number(avg), amount_start: lastLimitTrade.amount_start, first_currency: lastLimitTrade.first_currency, second_currency: lastLimitTrade.second_currency, pair: lastLimitTrade.pair, order_type: order_type}))
                     
                 }else {
-                    console.log("kondisi bawah")
                     let avg = myTrade.amount_start - limitStart;
                     leftAmount = limitAmount - limitStart
                     let average = avg / myTrade.amount_start
@@ -155,43 +148,6 @@ class TradeController {
                                     })
                             })
                     })
-
-                
-                // if (limitStart > limitAmount) {
-                //     leftAmount = lastLimitTrade.amount - (limitStart - limitAmount)
-                //     let average = 1 - (leftAmount / lastLimitTrade.amount_start);
-                //     updateLimit.push(LimitTrade.updateOne({_id: lastLimitTrade.id}, {amount: leftAmount, filled: average}))
-                //     tradeHistory.push(TradeHistory.create({user: lastLimitTrade.user, amount: lastLimitTrade.amount, amount_start: lastLimitTrade.amount_start, first_currency: lastLimitTrade.first_currency, last_currency: lastLimitTrade.last_currency, order_type: lastLimitTrade.order_type}))
-                //     // console.log(leftAmount, "left amount");
-                //     updateLimit.push(LimitTrade.deleteOne({_id: myTrade.id}));
-                //     tradeHistory.push(TradeHistory.create({amount: myTrade.amount, user: myTrade.user, order_type: myTrade.order_type, pair: myTrade.pair, amount_start: myTrade.amount_start, first_currency: myTrade.first_currency, second_currency: myTrade.second_currency}))
-                // }else {
-                //     let average = limitStart / limitAmount;
-                //     // console.log(average)
-                //     if (limitAmount === limitStart) {
-                //         updateLimit.push(LimitTrade.deleteOne({_id: lastLimitTrade.id}));
-                //         tradeHistory.push(TradeHistory.create({amount: lastLimitTrade.amount, price: lastLimitTrade.price, first_currency: lastLimitTrade.first_currency, second_currency: lastLimitTrade.second_currency, amount_start: lastLimitTrade.amount_start, pair: lastLimitTrade.pair, order_type: lastLimitTrade.order_type}))
-                //     }else {
-
-                //         updateLimit.push(LimitTrade.updateOne({_id: myTrade.id}, {amount: limitAmount - limitStart, filled: average}, {omitUndefined: true}));
-                //         tradeHistory.push(TradeHistory.create({amount: limitStart, user: myTrade.user, order_type: myTrade.order_type, pair: myTrade.pair, amount_start: myTrade.amount_start, first_currency: myTrade.first_currency, second_currency: myTrade.second_currency}))
-                //     }
-                // }
-
-                // console.log("Masuk bawah")
-                // res.status(200).json({message: "Your order has been created"})
-                // return Promise.all(updateLimit)
-                //     .then(value => {
-                //         return Promise.all(tradeHistory)
-                //             .then(value => {
-                //                 LimitTrade.find({})
-                //                     .then(data => {
-                //                         // console.log(data);
-                //                         Io.emit(`${pair}-limit`, {limitTrades: data, order_type: 'all'})
-                //                         res.status(200).json({message: "You order has been created"})
-                //                     })
-                //             })
-                //     })
             }).catch(next)
     };
 
