@@ -49,7 +49,6 @@ class TradeController {
         }else {
             total = amount;
         }
-        
         let objectText = generateText(second_currency);
         Account.findOne({user})
             .then(userAccount => {
@@ -82,8 +81,6 @@ class TradeController {
     }
 
     static checkBuyOrder(req,res,next) {
-
-        console.log("Masuk check")
         let Io = req.Io;
         let myTrade = req.myTrade;
         let { order_type, first_currency, second_currency } = req.body;
@@ -98,7 +95,6 @@ class TradeController {
                 let tradeHistory = [];
                 let lastLimitTrade; //Last Limit trade not 100% filled
                 let leftAmount; // last amount not 100% filled
-                let lastAmount;
 
                 filterTrade.forEach(item => {
                     if (limitStart < limitAmount) {
@@ -112,9 +108,6 @@ class TradeController {
                         }
                     }
                 })
-
-
-                
                 if (limitStart > limitAmount) {
                     let avg = limitStart - limitAmount;
                     leftAmount = lastLimitTrade.amount - limitAmount;
@@ -125,7 +118,6 @@ class TradeController {
                     //Update lastAccount
                     updateLimit.push(LimitTrade.updateOne({_id: lastLimitTrade.id}, {amount: leftAmount, filled: average}, {omitUndefined: true}))
                     tradeHistory.push(TradeHistory.create({user: lastLimitTrade.user, price: lastLimitTrade.price, amount: Number(avg), amount_start: lastLimitTrade.amount_start, first_currency: lastLimitTrade.first_currency, second_currency: lastLimitTrade.second_currency, pair: lastLimitTrade.pair, order_type: order_type}))
-                    
                 }else {
                     let avg = myTrade.amount_start - limitStart;
                     leftAmount = limitAmount - limitStart
