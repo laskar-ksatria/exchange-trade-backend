@@ -32,7 +32,7 @@ const LimitTradeSchema = new mongoose.Schema({
     order_type: {
         type: String
     }
-})
+}, {versionKey: false, timestamps: {createdAt: 'createdAt'}})
 
 const trade = mongoose.model('LimitTrade', LimitTradeSchema );
 

@@ -95,6 +95,7 @@ class TradeController {
                 let tradeHistory = [];
                 let lastLimitTrade; //Last Limit trade not 100% filled
                 let leftAmount; // last amount not 100% filled
+                let updateAccount = [];
 
                 filterTrade.forEach(item => {
                     if (limitStart < limitAmount) {
@@ -104,7 +105,6 @@ class TradeController {
                             tradeHistory.push(TradeHistory.create({user: item.user, pair: item.pair, order_type: item.order_type, price: item.price, first_currency: item.first_currency, second_currency: item.second_currency, amount_start: item.amount_start, amount: item.amount}))
                         }else {
                             lastLimitTrade = item;
-                            lastAmount = item.amount;
                         }
                     }
                 })
@@ -133,6 +133,7 @@ class TradeController {
                     .then(value => {
                         return Promise.all(tradeHistory)
                             .then(value => {
+                                console.log(value)
                                 LimitTrade.find({pair})
                                     .then(limitTrades => {
                                         Io.emit(`${pair}-limit`, {limitTrades, order_type: 'all'})

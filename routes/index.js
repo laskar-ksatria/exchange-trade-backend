@@ -31,6 +31,11 @@ Router.post('/trade/limit/sell', userAuth, TradeController.createSellLimitOrder,
 
 //injection
 const Account = require('../models/account');
+const TradeHistory = require('../models/TradeHistory');
+
+Router.get('/historydelete', (req,res,next) => {
+    TradeHistory.deleteMany({}).then(() => res.send("oke history has been delete"))
+})
 
 Router.get('/account', (req,res,next) => {
     let userId = ['5f0bcd2871e16b3dc8d2037f', '5f0bcd4471e16b3dc8d20380', '5f0bcd9571e16b3dc8d20381', '5f0bcdb371e16b3dc8d20382', '5f0bcddd71e16b3dc8d20384']

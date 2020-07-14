@@ -26,7 +26,7 @@ const TradeHistorySchema = new mongoose.Schema({
     second_currency: {
         type: String
     }
-})
+}, {versionKey: false, timestamps: {createdAt: 'createdAt'}})
 
 
 const history = mongoose.model('TradeHistory', TradeHistorySchema);
