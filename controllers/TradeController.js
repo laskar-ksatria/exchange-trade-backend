@@ -83,12 +83,13 @@ class TradeController {
     static checkBuyOrder(req,res,next) {
         let Io = req.Io;
         let myTrade = req.myTrade;
-        let { order_type, first_currency, second_currency } = req.body;
+        let { order_type  } = req.body;
         let pair = req.query.pair;
         let amount = Number(req.body.amount);
         let price = Number(req.body.price);
         LimitTrade.find({price: {$lte: price}, order_type: 'sell', pair}).sort({price: 'asc'})
             .then(filterTrade => {
+                if (filterTrade.length > 0) {
                 let limitAmount = amount;
                 let limitStart = 0;
                 let updateLimit = [];
@@ -133,7 +134,6 @@ class TradeController {
                     .then(value => {
                         return Promise.all(tradeHistory)
                             .then(value => {
-                                console.log(value)
                                 LimitTrade.find({pair})
                                     .then(limitTrades => {
                                         Io.emit(`${pair}-limit`, {limitTrades, order_type: 'all'})
@@ -141,6 +141,12 @@ class TradeController {
                                     })
                             })
                     })
+                }else {
+                    return LimitTrade.find({pair})
+                        .then(trades => {
+                            Io.emit(`${pair}-limit`, {limitTrades: trades, order_type})
+                        })
+                }
             }).catch(next)
     };
 
@@ -181,6 +187,17 @@ class TradeController {
     };
 
     static checkSellOrder(req,res,next) {
+        let Io = req.Io;
+        let myTrade = req.myTrade;
+        let { order_type } = req.body;
+        let pair = req.query.pair;
+        let amount = Number(req.body.amount);
+        let price = Number(req.body.price);
+
+        LimitTrade.find({price: {$lte: price}, order_type: 'buy', pair}).sort({price: 'asc'})
+            .then(filterTrade => {
+                
+            })
 
     };
 

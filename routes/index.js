@@ -2,8 +2,8 @@ const express = require('express');
 const Router = express.Router();
 const UserController = require('../controllers/userController');
 const TradeController = require('../controllers/TradeController');
-const { userAuth } = require('../middlewares/auth')
-
+const { userAuth } = require('../middlewares/auth');
+const  Account = require('../models/account');
 
 //User auth
 Router.get('/users', UserController.readAll);
@@ -16,9 +16,13 @@ Router.get('/trade/myLimitTrade', userAuth,TradeController.readAllmyLimit);
 Router.post('/trade/limit/buy', userAuth,TradeController.createBuyLimitOrder, TradeController.checkBuyOrder);
 Router.post('/trade/limit/sell', userAuth, TradeController.createSellLimitOrder, TradeController.checkSellOrder);
 
-
-
-
+//Account
+Router.get('/account', userAuth, (req,res,next) => {
+    Account.findOne({user: req.decoded.id})
+        .then(account => {
+            res.status(200).json(account);
+        })
+});
 
 
 
@@ -30,7 +34,6 @@ Router.post('/trade/limit/sell', userAuth, TradeController.createSellLimitOrder,
 
 
 //injection
-const Account = require('../models/account');
 const TradeHistory = require('../models/TradeHistory');
 
 Router.get('/historydelete', (req,res,next) => {
@@ -63,6 +66,7 @@ Router.get('/accounts', (req,res,next) => {
 });
 
 const LimitTrade = require('../models/LimitTrade');
+const user = require('../models/user');
 Router.get('/deletelimit', (req,res,next) => {
     LimitTrade.deleteMany({}).then(() => res.send("Oke"))
 })
