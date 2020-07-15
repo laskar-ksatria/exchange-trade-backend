@@ -17,15 +17,6 @@ const TradeHistorySchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    amount_start: {
-        type: Number
-    },
-    first_currency: {
-        type: String,
-    },
-    second_currency: {
-        type: String
-    }
 }, {versionKey: false, timestamps: {createdAt: 'createdAt'}})
 
 

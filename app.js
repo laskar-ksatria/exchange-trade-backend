@@ -29,7 +29,7 @@ app.use(require('./middlewares/errHandler'));
 
 Io.on('connection', socket => {
     console.log('Io connect');
-    Io.on('disconnect', () => console.log('Io disconnect'))
+    socket.on('disconnected', () => console.log('Io disconnect'))
 })
 
 server.listen(PORT, () => console.log(`Server started on ${PORT}`))

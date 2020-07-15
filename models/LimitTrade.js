@@ -31,6 +31,9 @@ const LimitTradeSchema = new mongoose.Schema({
     },
     order_type: {
         type: String
+    },
+    total: {
+        type: Number
     }
 }, {versionKey: false, timestamps: {createdAt: 'createdAt'}})
 
