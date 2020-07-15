@@ -13,7 +13,7 @@ Router.post('/users/login', UserController.login);
 //Trade
 Router.get('/trade/limit', TradeController.readAllLimit);
 Router.get('/trade/myLimitTrade', userAuth,TradeController.readAllmyLimit);
-Router.post('/trade/limit/buy', userAuth,TradeController.createBuyLimitOrder, TradeController.checkBuyOrder);
+Router.post('/trade/limit/buy',userAuth,TradeController.createBuyLimitOrder, TradeController.checkBuyOrder);
 Router.post('/trade/limit/sell', userAuth, TradeController.createSellLimitOrder, TradeController.checkSellOrder);
 
 //Account
